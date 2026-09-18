@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mindora Map</title>
+<meta name="theme-color" content="#1f4d3a">
+<style>
+  :root{
+    --bg:#f3f7f4; --panel:#ffffff; --ink:#18261f; --muted:#5b6b62;
+    --line:#d3ded7; --brand:#1f4d3a; --brand-ink:#ffffff; --hi:#e8590c; --hi-soft:#fff0e6;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#101a15; --panel:#17241d; --ink:#e8f0eb; --muted:#9db0a5; --line:#2a3d33; --brand:#2f7a5a; --hi:#ff8a3d; --hi-soft:#33210f;}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:"Noto Sans Sinhala","Iskoola Pota","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column}
+  header{background:var(--brand);color:var(--brand-ink);padding:12px 16px calc(12px);padding-top:max(12px,env(safe-area-inset-top))}
+  header h1{margin:0;font-size:1.05rem;font-weight:700;line-height:1.3}
+  header p{margin:2px 0 0;font-size:.82rem;opacity:.85}
+  main{flex:1;min-height:0;display:flex;flex-direction:column}
+  #mapwrap{position:relative;flex:0 0 58%;min-height:0;background:#e4eee8;overflow:hidden;border-bottom:1px solid var(--line)}
+  #viewport{position:absolute;inset:0;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+  #viewport.drag{cursor:grabbing}
+  #stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+  #stage img{display:block;width:1775px;height:884px;pointer-events:none;-webkit-user-drag:none}
+  #pin{position:absolute;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;border:5px solid var(--hi);background:rgba(232,89,12,.16);display:none;pointer-events:none}
+  #pin.on{display:block;animation:pulse 1.6s ease-out 3}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,89,12,.55)}100%{box-shadow:0 0 0 46px rgba(232,89,12,0)}}
+  @media (prefers-reduced-motion:reduce){#pin.on{animation:none}}
+  .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+  .zoom button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+  .zoom button:active{background:var(--line)}
+  #chip{position:absolute;left:10px;bottom:10px;right:64px;background:var(--panel);border:2px solid var(--hi);border-radius:12px;padding:8px 12px;display:none;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  #chip.on{display:flex}
+  #chip b{flex:0 0 auto;min-width:34px;height:34px;border-radius:50%;background:var(--hi);color:#fff;display:grid;place-items:center;font-size:.95rem}
+  #chip span{font-weight:600;font-size:.95rem;line-height:1.25}
+  #chip button{margin-left:auto;border:0;background:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px 6px}
+  .hint{position:absolute;left:10px;top:10px;background:rgba(24,38,31,.72);color:#fff;font-size:.75rem;padding:5px 9px;border-radius:8px;pointer-events:none;transition:opacity .6s}
+  aside{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel)}
+  .search{padding:10px 12px;border-bottom:1px solid var(--line)}
+  .search input{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+  .search input:focus,.zoom button:focus-visible,#list button:focus-visible,#chip button:focus-visible{outline:3px solid var(--hi);outline-offset:1px}
+  #list{list-style:none;margin:0;padding:0;overflow:auto;flex:1;-webkit-overflow-scrolling:touch}
+  #list li{border-bottom:1px solid var(--line)}
+  #list button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:11px 14px;border:0;background:none;color:var(--ink);font:inherit;font-size:.95rem;cursor:pointer}
+  #list button:hover{background:var(--bg)}
+  #list li.sel button{background:var(--hi-soft)}
+  #list .n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--brand);display:grid;place-items:center;font-size:.82rem;font-weight:700;color:var(--brand)}
+  @media (prefers-color-scheme:dark){#list .n{color:#9fd8bd;border-color:#9fd8bd}}
+  #list li.sel .n{background:var(--hi);border-color:var(--hi);color:#fff}
+  #empty{padding:18px;color:var(--muted);display:none}
+  @media (min-width:820px){
+    main{flex-direction:row}
+    #mapwrap{flex:1;border-bottom:0;border-right:1px solid var(--line)}
+    aside{flex:0 0 340px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Campus Map &nbsp;|&nbsp; සරසවි භූමි සිතියම</h1>
+  <p>ගොඩනැගිල්ල තෝරන්න හෝ සිතියමේ අංකය ස්පර්ශ කරන්න</p>
+</header>
+<main>
+  <div id="mapwrap">
+    <div id="viewport" aria-label="Zoomable campus map">
+      <div id="stage">
+        <img id="mapimg" src="map.png" alt="Campus map" draggable="false">
+        <div id="pin"></div>
+      </div>
+    </div>
+    <div class="hint" id="hint">Pinch / scroll to zoom &middot; drag to move</div>
+    <div class="zoom">
+      <button id="zin" aria-label="Zoom in">+</button>
+      <button id="zout" aria-label="Zoom out">&minus;</button>
+      <button id="zfit" aria-label="Reset view" style="font-size:1rem">&#x2922;</button>
+    </div>
+    <div id="chip"><b id="chipn"></b><span id="chipt"></span><button id="chipx" aria-label="Clear">&times;</button></div>
+  </div>
+  <aside>
+    <div class="search"><input id="q" type="search" placeholder="සොයන්න… (e.g. Library, Hostel)" autocomplete="off"></div>
+    <ul id="list"></ul>
+    <div id="empty">ප්‍රතිඵල නැත / No results</div>
+  </aside>
+</main>
+
+<script>
+/* ---- Places: x,y = centre of the number circle on map.png (1775 x 884) ---- */
+var W=1775,H=884;
+var PLACES=[
+ [1,"FASc – Health Promotion Unit",250,105],
+ [2,"FASc – ICT Building",250,290],
+ [3,"FASc – Canteen",252,400],
+ [4,"FASc – Stage I Building",400,180],
+ [5,"FASc – Library",462,360],
+ [6,"Pump House",531,331],
+ [7,"University Water Tank",545,461],
+ [8,"FASc – Stage II Building",591,46],
+ [9,"FASc – New Physics Lab",680,421],
+ [10,"Faculty of Technology",746,556],
+ [11,"FASc – Greenhouse",692,64],
+ [12,"FASc – Tissue Culture Lab",828,90],
+ [13,"Devanampiyatissa Hostel",763,404],
+ [14,"Mahasen Hostel",903,106],
+ [15,"Dutugeminu Hostel",926,268],
+ [16,"Viharamahadevi Hostel",921,465],
+ [17,"Pandula Hostel",1100,306],
+ [18,"Anula Devi Hostel",1262,471],
+ [19,"Swarnapali Hostel",994,574],
+ [20,"Soma Devi Hostel",1110,738],
+ [21,"New Soma Devi Hostel",984,664],
+ [22,"Ratnamali Hostel",1180,786],
+ [23,"Hemamali Hostel",1365,611],
+ [24,"Gnanam Hostel",1420,772],
+ [25,"Sangamitta Hostel",1312,553],
+ [26,"Security Point",1356,262],
+ [27,"Volleyball Court",1499,259],
+ [28,"Security Point",1598,241],
+ [29,"Anubudu Mihidu Maha Seya",1630,408]
+];
+
+var vp=document.getElementById('viewport'), stage=document.getElementById('stage'),
+    pin=document.getElementById('pin'), chip=document.getElementById('chip'),
+    chipn=document.getElementById('chipn'), chipt=document.getElementById('chipt'),
+    hint=document.getElementById('hint'), list=document.getElementById('list'),
+    q=document.getElementById('q'), empty=document.getElementById('empty');
+
+var s=1,tx=0,ty=0,fit=1,MAXS=3,selected=null;
+
+function vpSize(){var r=vp.getBoundingClientRect();return {w:r.width,h:r.height};}
+function clamp(){
+  var v=vpSize(), m=80;
+  var iw=W*s, ih=H*s;
+  tx=Math.min(v.w-m, Math.max(m-iw, tx));
+  ty=Math.min(v.h-m, Math.max(m-ih, ty));
+}
+function apply(){clamp();stage.style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';}
+function fitView(){
+  var v=vpSize();
+  fit=Math.min(v.w/W, v.h/H);
+  s=fit; tx=(v.w-W*s)/2; ty=(v.h-H*s)/2; apply();
+}
+function zoomAt(cx,cy,ns){
+  ns=Math.max(fit*0.9,Math.min(MAXS,ns));
+  tx=cx-(cx-tx)*(ns/s); ty=cy-(cy-ty)*(ns/s); s=ns; apply();
+}
+function centerOn(x,y,ns){
+  var v=vpSize(); s=Math.max(fit*0.9,Math.min(MAXS,ns));
+  tx=v.w/2-x*s; ty=v.h/2-y*s; apply();
+}
+function hideHint(){hint.style.opacity=0;}
+
+/* pointers: pan, pinch, tap */
+var ptrs={}, startDist=0, startScale=1, moved=false, downPos=null;
+vp.addEventListener('pointerdown',function(e){
+  vp.setPointerCapture(e.pointerId);
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  var ids=Object.keys(ptrs);
+  if(ids.length===1){moved=false;downPos={x:e.clientX,y:e.clientY};}
+  if(ids.length===2){
+    var a=ptrs[ids[0]],b=ptrs[ids[1]];
+    startDist=Math.hypot(a.x-b.x,a.y-b.y); startScale=s; moved=true;
+  }
+  vp.classList.add('drag');
+});
+vp.addEventListener('pointermove',function(e){
+  var p=ptrs[e.pointerId]; if(!p) return;
+  var ids=Object.keys(ptrs);
+  if(ids.length===1){
+    var dx=e.clientX-p.x, dy=e.clientY-p.y;
+    if(downPos && Math.hypot(e.clientX-downPos.x,e.clientY-downPos.y)>6){moved=true;hideHint();}
+    tx+=dx; ty+=dy; p.x=e.clientX; p.y=e.clientY; apply();
+  }else if(ids.length===2){
+    p.x=e.clientX; p.y=e.clientY;
+    var a=ptrs[ids[0]],b=ptrs[ids[1]];
+    var d=Math.hypot(a.x-b.x,a.y-b.y);
+    var r=vp.getBoundingClientRect();
+    zoomAt((a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top,startScale*d/startDist);
+    hideHint();
+  }
+});
+function up(e){
+  var wasSingle=Object.keys(ptrs).length===1;
+  delete ptrs[e.pointerId];
+  if(!Object.keys(ptrs).length) vp.classList.remove('drag');
+  if(e.type==='pointerup' && wasSingle && !moved){
+    var r=vp.getBoundingClientRect();
+    var ix=(e.clientX-r.left-tx)/s, iy=(e.clientY-r.top-ty)/s;
+    var best=null,bd=48;
+    PLACES.forEach(function(p){var d=Math.hypot(p[2]-ix,p[3]-iy);if(d<bd){bd=d;best=p;}});
+    if(best) select(best[0],false);
+  }
+}
+vp.addEventListener('pointerup',up);
+vp.addEventListener('pointercancel',up);
+vp.addEventListener('wheel',function(e){
+  e.preventDefault(); hideHint();
+  var r=vp.getBoundingClientRect();
+  zoomAt(e.clientX-r.left,e.clientY-r.top,s*Math.exp(-e.deltaY*0.0015));
+},{passive:false});
+vp.addEventListener('dblclick',function(e){
+  var r=vp.getBoundingClientRect(); zoomAt(e.clientX-r.left,e.clientY-r.top,s*1.8);
+});
+
+function zc(f){var v=vpSize();zoomAt(v.w/2,v.h/2,s*f);hideHint();}
+document.getElementById('zin').onclick=function(){zc(1.5)};
+document.getElementById('zout').onclick=function(){zc(1/1.5)};
+document.getElementById('zfit').onclick=function(){fitView();clearSel();};
+
+/* selection */
+function select(n,scrollList){
+  var p=PLACES.filter(function(x){return x[0]===n})[0]; if(!p) return;
+  selected=n;
+  pin.style.left=p[2]+'px'; pin.style.top=p[3]+'px';
+  pin.classList.remove('on'); void pin.offsetWidth; pin.classList.add('on');
+  chipn.textContent=n; chipt.textContent=p[1]; chip.classList.add('on');
+  centerOn(p[2],p[3],Math.max(s,0.75)); hideHint();
+  Array.prototype.forEach.call(list.children,function(li){
+    var on=+li.dataset.n===n; li.classList.toggle('sel',on);
+    if(on && scrollList!==false) li.scrollIntoView({block:'nearest'});
+  });
+  if(scrollList!==false){document.getElementById('mapwrap').scrollIntoView({block:'nearest'});}
+}
+function clearSel(){
+  selected=null; pin.classList.remove('on'); chip.classList.remove('on');
+  Array.prototype.forEach.call(list.children,function(li){li.classList.remove('sel')});
+}
+document.getElementById('chipx').onclick=clearSel;
+
+/* list */
+PLACES.forEach(function(p){
+  var li=document.createElement('li'); li.dataset.n=p[0]; li.dataset.t=p[1].toLowerCase();
+  var b=document.createElement('button'); b.type='button';
+  b.innerHTML='<span class="n">'+p[0]+'</span><span></span>';
+  b.lastChild.textContent=p[1];
+  b.onclick=function(){select(p[0],false);};
+  li.appendChild(b); list.appendChild(li);
+});
+q.addEventListener('input',function(){
+  var t=q.value.trim().toLowerCase(), c=0;
+  Array.prototype.forEach.call(list.children,function(li){
+    var show=!t||li.dataset.t.indexOf(t)>-1||li.dataset.n===t; li.style.display=show?'':'none'; if(show)c++;
+  });
+  empty.style.display=c?'none':'block';
+});
+
+/* init */
+var img=document.getElementById('mapimg');
+function init(){fitView();}
+if(img.complete) init(); else img.onload=init;
+window.addEventListener('resize',function(){var was=selected;fitView();if(was)select(was,false);});
+setTimeout(hideHint,6000);
+</script>
+</body>
+</html>
