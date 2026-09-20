@@ -1,124 +1,145 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mindora Map</title>
-<meta name="theme-color" content="#1f4d3a">
+<title>MINDORA – Microbiology Exhibition | Venue Map</title>
+<meta name="description" content="Find every lab, lecture hall and facility at the MINDORA Microbiology Exhibition.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="logo.png">
 <style>
   :root{
-    --bg:#f3f7f4; --panel:#ffffff; --ink:#18261f; --muted:#5b6b62;
-    --line:#d3ded7; --brand:#1f4d3a; --brand-ink:#ffffff; --hi:#e8590c; --hi-soft:#fff0e6;
-  }
-  @media (prefers-color-scheme:dark){
-    :root{--bg:#101a15; --panel:#17241d; --ink:#e8f0eb; --muted:#9db0a5; --line:#2a3d33; --brand:#2f7a5a; --hi:#ff8a3d; --hi-soft:#33210f;}
+    --navy:#035b82; --green:#3db54a; --teal:#1e9077; --indigo:#262262;
+    --ink:#132a35; --muted:#587080; --line:#d7e4e8; --bg:#f3f8f7; --panel:#fff;
+    --pin:#262262;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{font-family:"Noto Sans Sinhala","Iskoola Pota","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column}
-  header{background:var(--brand);color:var(--brand-ink);padding:12px 16px calc(12px);padding-top:max(12px,env(safe-area-inset-top))}
-  header h1{margin:0;font-size:1.05rem;font-weight:700;line-height:1.3}
-  header p{margin:2px 0 0;font-size:.82rem;opacity:.85}
+  body{font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;-webkit-text-size-adjust:100%}
+  button,input{font:inherit;color:inherit}
+
+  header{background:#fff;border-bottom:3px solid var(--green);padding:8px 14px;padding-top:max(8px,env(safe-area-inset-top));display:flex;align-items:center;gap:14px}
+  header img{height:40px;width:auto;display:block}
+  header p{margin:0 0 0 auto;font-size:.78rem;color:var(--muted);text-align:right;line-height:1.25;font-weight:600}
+  @media (max-width:420px){header p{display:none} header img{height:36px}}
+
   main{flex:1;min-height:0;display:flex;flex-direction:column}
-  #mapwrap{position:relative;flex:0 0 58%;min-height:0;background:#e4eee8;overflow:hidden;border-bottom:1px solid var(--line)}
+
+  #mapwrap{position:relative;flex:0 0 46%;min-height:0;background:#dfeee6;overflow:hidden}
   #viewport{position:absolute;inset:0;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
   #viewport.drag{cursor:grabbing}
   #stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
-  #stage img{display:block;width:1775px;height:884px;pointer-events:none;-webkit-user-drag:none}
-  #pin{position:absolute;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;border:5px solid var(--hi);background:rgba(232,89,12,.16);display:none;pointer-events:none}
-  #pin.on{display:block;animation:pulse 1.6s ease-out 3}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,89,12,.55)}100%{box-shadow:0 0 0 46px rgba(232,89,12,0)}}
+  #stage img{display:block;width:3046px;height:2199px;pointer-events:none;-webkit-user-drag:none;max-width:none}
+  #pin{position:absolute;width:190px;height:190px;margin:-95px 0 0 -95px;border-radius:50%;border:12px solid var(--pin);background:rgba(38,34,98,.14);display:none;pointer-events:none}
+  #pin.on{display:block;animation:pulse 1.5s ease-out 3}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(38,34,98,.5)}100%{box-shadow:0 0 0 110px rgba(38,34,98,0)}}
   @media (prefers-reduced-motion:reduce){#pin.on{animation:none}}
+
   .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
-  .zoom button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+  .zoom button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2)}
   .zoom button:active{background:var(--line)}
-  #chip{position:absolute;left:10px;bottom:10px;right:64px;background:var(--panel);border:2px solid var(--hi);border-radius:12px;padding:8px 12px;display:none;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .hint{position:absolute;left:10px;top:10px;background:rgba(19,42,53,.78);color:#fff;font-size:.75rem;padding:6px 10px;border-radius:8px;pointer-events:none;transition:opacity .6s}
+
+  #chip{position:absolute;left:10px;right:64px;bottom:10px;background:#fff;border:2px solid var(--pin);border-radius:14px;padding:8px 10px 8px 8px;display:none;align-items:center;gap:10px;box-shadow:0 3px 10px rgba(0,0,0,.22)}
   #chip.on{display:flex}
-  #chip b{flex:0 0 auto;min-width:34px;height:34px;border-radius:50%;background:var(--hi);color:#fff;display:grid;place-items:center;font-size:.95rem}
-  #chip span{font-weight:600;font-size:.95rem;line-height:1.25}
-  #chip button{margin-left:auto;border:0;background:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:4px 6px}
-  .hint{position:absolute;left:10px;top:10px;background:rgba(24,38,31,.72);color:#fff;font-size:.75rem;padding:5px 9px;border-radius:8px;pointer-events:none;transition:opacity .6s}
-  aside{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel)}
-  .search{padding:10px 12px;border-bottom:1px solid var(--line)}
-  .search input{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
-  .search input:focus,.zoom button:focus-visible,#list button:focus-visible,#chip button:focus-visible{outline:3px solid var(--hi);outline-offset:1px}
-  #list{list-style:none;margin:0;padding:0;overflow:auto;flex:1;-webkit-overflow-scrolling:touch}
-  #list li{border-bottom:1px solid var(--line)}
-  #list button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:11px 14px;border:0;background:none;color:var(--ink);font:inherit;font-size:.95rem;cursor:pointer}
-  #list button:hover{background:var(--bg)}
-  #list li.sel button{background:var(--hi-soft)}
-  #list .n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--brand);display:grid;place-items:center;font-size:.82rem;font-weight:700;color:var(--brand)}
-  @media (prefers-color-scheme:dark){#list .n{color:#9fd8bd;border-color:#9fd8bd}}
-  #list li.sel .n{background:var(--hi);border-color:var(--hi);color:#fff}
-  #empty{padding:18px;color:var(--muted);display:none}
-  @media (min-width:820px){
+  #chip b{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--pin);color:#fff;display:grid;place-items:center;font-size:.95rem}
+  #chip span{font-weight:700;font-size:.95rem;line-height:1.2}
+  #chip button{margin-left:auto;border:0;background:none;color:var(--muted);font-size:1.4rem;cursor:pointer;padding:4px 8px}
+
+  aside{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border-top:1px solid var(--line)}
+  .tools{padding:10px 12px 8px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)}
+  .tools input{width:100%;font-size:1rem;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+  .chips button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .chips button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  #list{list-style:none;margin:0;padding:0;flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:env(safe-area-inset-bottom)}
+  .place{border-bottom:1px solid var(--line)}
+  .head{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;background:none;text-align:left;cursor:pointer}
+  .head:hover{background:var(--bg)}
+  .num{flex:0 0 auto;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.95rem;color:#fff;background:var(--navy)}
+  .place.fac .num{background:var(--teal)}
+  .ttl{flex:1;min-width:0}
+  .ttl strong{display:block;font-size:1rem;line-height:1.25}
+  .ttl small{display:block;color:var(--muted);font-size:.83rem;margin-top:2px}
+  .chev{flex:0 0 auto;width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+  .place.sel{background:#f2f9f4}
+  .place.sel .chev{transform:rotate(-135deg)}
+  .place.sel .num{background:var(--pin);box-shadow:0 0 0 4px rgba(38,34,98,.18)}
+  .body{display:none;padding:0 14px 16px 66px}
+  .place.sel .body{display:block}
+  .body p{margin:0 0 10px;color:var(--muted);font-size:.85rem}
+  ol.seq{list-style:none;margin:0;padding:0;position:relative}
+  ol.seq li{position:relative;padding:0 0 14px 26px}
+  ol.seq li:last-child{padding-bottom:0}
+  ol.seq li::before{content:"";position:absolute;left:5px;top:16px;bottom:-2px;width:2px;background:var(--green);opacity:.55}
+  ol.seq li:last-child::before{display:none}
+  ol.seq li::after{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--green)}
+  .code{display:inline-block;font-weight:800;color:var(--navy);font-size:.95rem}
+  .topic{display:block;font-size:.95rem;line-height:1.3}
+  mark{background:#fff3a3;color:inherit;border-radius:3px;padding:0 1px}
+  #empty{display:none;padding:22px 16px;color:var(--muted);text-align:center}
+
+  :focus-visible{outline:3px solid var(--indigo);outline-offset:2px}
+
+  @media (min-width:900px){
     main{flex-direction:row}
-    #mapwrap{flex:1;border-bottom:0;border-right:1px solid var(--line)}
-    aside{flex:0 0 340px}
+    #mapwrap{flex:1}
+    aside{flex:0 0 400px;border-top:0;border-left:1px solid var(--line)}
+    header img{height:48px}
+    header{padding:10px 22px}
   }
 </style>
 </head>
 <body>
 <header>
-  <h1>Campus Map &nbsp;&nbsp;</h1>
-  <p>ගොඩනැගිල්ල තෝරන්න හෝ සිතියමේ අංකය ස්පර්ශ කරන්න</p>
+  <img src="logo.png" alt="MINDORA – Microbiology Exhibition">
+  <p>Venue map<br>Tap a number to explore</p>
 </header>
+
 <main>
   <div id="mapwrap">
-    <div id="viewport" aria-label="Zoomable campus map">
+    <div id="viewport" role="img" aria-label="Zoomable exhibition venue map">
       <div id="stage">
-        <img id="mapimg" src="map.png" alt="Campus map" draggable="false">
+        <img id="mapimg" src="map.jpg" alt="Exhibition venue map" draggable="false">
         <div id="pin"></div>
       </div>
     </div>
-    <div class="hint" id="hint">Pinch / scroll to zoom &middot; drag to move</div>
+    <div class="hint" id="hint">Pinch to zoom &middot; drag to move</div>
     <div class="zoom">
       <button id="zin" aria-label="Zoom in">+</button>
       <button id="zout" aria-label="Zoom out">&minus;</button>
-      <button id="zfit" aria-label="Reset view" style="font-size:1rem">&#x2922;</button>
+      <button id="zfit" aria-label="Show whole map" style="font-size:1.05rem">&#x2922;</button>
     </div>
-    <div id="chip"><b id="chipn"></b><span id="chipt"></span><button id="chipx" aria-label="Clear">&times;</button></div>
+    <div id="chip"><b id="chipn"></b><span id="chipt"></span><button id="chipx" aria-label="Clear selection">&times;</button></div>
   </div>
+
   <aside>
-    <div class="search"><input id="q" type="search" placeholder="සොයන්න… (e.g. Library, Hostel)" autocomplete="off"></div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search venue or topic (e.g. LH04)" autocomplete="off" aria-label="Search venues">
+      <div class="chips" id="chips">
+        <button data-f="all" aria-pressed="true">All</button>
+        <button data-f="ex" aria-pressed="false">Exhibits</button>
+        <button data-f="fac" aria-pressed="false">Facilities</button>
+      </div>
+    </div>
     <ul id="list"></ul>
-    <div id="empty">ප්‍රතිඵල නැත / No results</div>
+    <div id="empty">No matching venue. Try another word.</div>
   </aside>
 </main>
 
 <script>
-/* ---- Places: x,y = centre of the number circle on map.png (1775 x 884) ---- */
-var W=1775,H=884;
+/* Map image size and pin position (centre of each number circle, in image pixels) */
+var W=3046,H=2199;
 var PLACES=[
- [1,"FASc – Health Promotion Unit",250,105],
- [2,"FASc – ICT Building",250,290],
- [3,"FASc – Canteen",252,400],
- [4,"FASc – Stage I Building",400,180],
- [5,"FASc – Library",462,360],
- [6,"Pump House",531,331],
- [7,"University Water Tank",545,461],
- [8,"FASc – Stage II Building",591,46],
- [9,"FASc – New Physics Lab",680,421],
- [10,"Faculty of Technology",746,556],
- [11,"FASc – Greenhouse",692,64],
- [12,"FASc – Tissue Culture Lab",828,90],
- [13,"Devanampiyatissa Hostel",763,404],
- [14,"Mahasen Hostel",903,106],
- [15,"Dutugeminu Hostel",926,268],
- [16,"Viharamahadevi Hostel",921,465],
- [17,"Pandula Hostel",1100,306],
- [18,"Anula Devi Hostel",1262,471],
- [19,"Swarnapali Hostel",994,574],
- [20,"Soma Devi Hostel",1110,738],
- [21,"New Soma Devi Hostel",984,664],
- [22,"Ratnamali Hostel",1180,786],
- [23,"Hemamali Hostel",1365,611],
- [24,"Gnanam Hostel",1420,772],
- [25,"Sangamitta Hostel",1312,553],
- [26,"Security Point",1356,262],
- [27,"Volleyball Court",1499,259],
- [28,"Security Point",1598,241],
- [29,"Anubudu Mihidu Maha Seya",1630,408]
+ {n:"01",x:1142,y:1625,type:"ex", name:"LH11 Building", sub:"Agriculture & Soil",
+  venues:[["LH11","Agriculture & Soil"]]},
+ {n:"02",x:2298,y:631, type:"ex", name:"Stage I Building", sub:"5 venues",
+  venues:[["ZOO Lab","Microbiology"],["BOT Lab","Practical Session"],["LH04","Astromicrobiology"],["LH02","Industrial Microbiology"],["LH01","Environmental & Water"]]},
+ {n:"03",x:2361,y:1555,type:"ex", name:"Building 03", sub:"3 venues",
+  venues:[["LH07","Medical Microbiology"],["LH09","Food Microbiology"],["LH08","Bio Tech & Molecular Microbiology"]]},
+ {n:"04",x:1402,y:567, type:"fac",name:"Canteen", sub:"Food & drinks", venues:[]},
+ {n:"05",x:1187,y:1148,type:"fac",name:"Washrooms", sub:"Facilities", venues:[]}
 ];
 
 var vp=document.getElementById('viewport'), stage=document.getElementById('stage'),
@@ -127,19 +148,17 @@ var vp=document.getElementById('viewport'), stage=document.getElementById('stage
     hint=document.getElementById('hint'), list=document.getElementById('list'),
     q=document.getElementById('q'), empty=document.getElementById('empty');
 
-var s=1,tx=0,ty=0,fit=1,MAXS=3,selected=null;
+var s=1,tx=0,ty=0,fit=1,MAXS=1.6,selected=null,filter='all';
 
 function vpSize(){var r=vp.getBoundingClientRect();return {w:r.width,h:r.height};}
 function clamp(){
   var v=vpSize(), m=80;
-  var iw=W*s, ih=H*s;
-  tx=Math.min(v.w-m, Math.max(m-iw, tx));
-  ty=Math.min(v.h-m, Math.max(m-ih, ty));
+  tx=Math.min(v.w-m, Math.max(m-W*s, tx));
+  ty=Math.min(v.h-m, Math.max(m-H*s, ty));
 }
 function apply(){clamp();stage.style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';}
 function fitView(){
-  var v=vpSize();
-  fit=Math.min(v.w/W, v.h/H);
+  var v=vpSize(); fit=Math.min(v.w/W,v.h/H);
   s=fit; tx=(v.w-W*s)/2; ty=(v.h-H*s)/2; apply();
 }
 function zoomAt(cx,cy,ns){
@@ -148,11 +167,11 @@ function zoomAt(cx,cy,ns){
 }
 function centerOn(x,y,ns){
   var v=vpSize(); s=Math.max(fit*0.9,Math.min(MAXS,ns));
-  tx=v.w/2-x*s; ty=v.h/2-y*s; apply();
+  tx=v.w/2-x*s; ty=v.h/2-y*s-18; apply();
 }
 function hideHint(){hint.style.opacity=0;}
 
-/* pointers: pan, pinch, tap */
+/* touch / mouse: pan, pinch, tap */
 var ptrs={}, startDist=0, startScale=1, moved=false, downPos=null;
 vp.addEventListener('pointerdown',function(e){
   vp.setPointerCapture(e.pointerId);
@@ -169,28 +188,24 @@ vp.addEventListener('pointermove',function(e){
   var p=ptrs[e.pointerId]; if(!p) return;
   var ids=Object.keys(ptrs);
   if(ids.length===1){
-    var dx=e.clientX-p.x, dy=e.clientY-p.y;
     if(downPos && Math.hypot(e.clientX-downPos.x,e.clientY-downPos.y)>6){moved=true;hideHint();}
-    tx+=dx; ty+=dy; p.x=e.clientX; p.y=e.clientY; apply();
+    tx+=e.clientX-p.x; ty+=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; apply();
   }else if(ids.length===2){
     p.x=e.clientX; p.y=e.clientY;
-    var a=ptrs[ids[0]],b=ptrs[ids[1]];
-    var d=Math.hypot(a.x-b.x,a.y-b.y);
-    var r=vp.getBoundingClientRect();
-    zoomAt((a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top,startScale*d/startDist);
+    var a=ptrs[ids[0]],b=ptrs[ids[1]], r=vp.getBoundingClientRect();
+    zoomAt((a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top,startScale*Math.hypot(a.x-b.x,a.y-b.y)/startDist);
     hideHint();
   }
 });
 function up(e){
-  var wasSingle=Object.keys(ptrs).length===1;
+  var single=Object.keys(ptrs).length===1;
   delete ptrs[e.pointerId];
   if(!Object.keys(ptrs).length) vp.classList.remove('drag');
-  if(e.type==='pointerup' && wasSingle && !moved){
+  if(e.type==='pointerup' && single && !moved){
     var r=vp.getBoundingClientRect();
-    var ix=(e.clientX-r.left-tx)/s, iy=(e.clientY-r.top-ty)/s;
-    var best=null,bd=48;
-    PLACES.forEach(function(p){var d=Math.hypot(p[2]-ix,p[3]-iy);if(d<bd){bd=d;best=p;}});
-    if(best) select(best[0],false);
+    var ix=(e.clientX-r.left-tx)/s, iy=(e.clientY-r.top-ty)/s, best=null, bd=130;
+    PLACES.forEach(function(p){var d=Math.hypot(p.x-ix,p.y-iy);if(d<bd){bd=d;best=p;}});
+    if(best) select(best.n);
   }
 }
 vp.addEventListener('pointerup',up);
@@ -203,54 +218,78 @@ vp.addEventListener('wheel',function(e){
 vp.addEventListener('dblclick',function(e){
   var r=vp.getBoundingClientRect(); zoomAt(e.clientX-r.left,e.clientY-r.top,s*1.8);
 });
-
 function zc(f){var v=vpSize();zoomAt(v.w/2,v.h/2,s*f);hideHint();}
 document.getElementById('zin').onclick=function(){zc(1.5)};
 document.getElementById('zout').onclick=function(){zc(1/1.5)};
 document.getElementById('zfit').onclick=function(){fitView();clearSel();};
 
 /* selection */
-function select(n,scrollList){
-  var p=PLACES.filter(function(x){return x[0]===n})[0]; if(!p) return;
+function select(n){
+  var p=PLACES.filter(function(x){return x.n===n})[0]; if(!p) return;
   selected=n;
-  pin.style.left=p[2]+'px'; pin.style.top=p[3]+'px';
+  pin.style.left=p.x+'px'; pin.style.top=p.y+'px';
   pin.classList.remove('on'); void pin.offsetWidth; pin.classList.add('on');
-  chipn.textContent=n; chipt.textContent=p[1]; chip.classList.add('on');
-  centerOn(p[2],p[3],Math.max(s,0.75)); hideHint();
+  chipn.textContent=p.n; chipt.textContent=p.name; chip.classList.add('on');
+  centerOn(p.x,p.y,Math.max(s,fit*1.6)); hideHint();
+  markSel(true);
+}
+function markSel(scroll){
   Array.prototype.forEach.call(list.children,function(li){
-    var on=+li.dataset.n===n; li.classList.toggle('sel',on);
-    if(on && scrollList!==false) li.scrollIntoView({block:'nearest'});
+    var on=li.dataset.n===selected; li.classList.toggle('sel',on);
+    li.querySelector('.head').setAttribute('aria-expanded',on);
+    if(on&&scroll) setTimeout(function(){li.scrollIntoView({block:'nearest',behavior:'smooth'});},30);
   });
-  if(scrollList!==false){document.getElementById('mapwrap').scrollIntoView({block:'nearest'});}
 }
 function clearSel(){
-  selected=null; pin.classList.remove('on'); chip.classList.remove('on');
-  Array.prototype.forEach.call(list.children,function(li){li.classList.remove('sel')});
+  selected=null; pin.classList.remove('on'); chip.classList.remove('on'); markSel(false);
 }
 document.getElementById('chipx').onclick=clearSel;
 
 /* list */
-PLACES.forEach(function(p){
-  var li=document.createElement('li'); li.dataset.n=p[0]; li.dataset.t=p[1].toLowerCase();
-  var b=document.createElement('button'); b.type='button';
-  b.innerHTML='<span class="n">'+p[0]+'</span><span></span>';
-  b.lastChild.textContent=p[1];
-  b.onclick=function(){select(p[0],false);};
-  li.appendChild(b); list.appendChild(li);
-});
-q.addEventListener('input',function(){
-  var t=q.value.trim().toLowerCase(), c=0;
-  Array.prototype.forEach.call(list.children,function(li){
-    var show=!t||li.dataset.t.indexOf(t)>-1||li.dataset.n===t; li.style.display=show?'':'none'; if(show)c++;
+function esc(t){return t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function hl(t,term){
+  t=esc(t); if(!term) return t;
+  var i=t.toLowerCase().indexOf(esc(term).toLowerCase()); if(i<0) return t;
+  return t.slice(0,i)+'<mark>'+t.slice(i,i+esc(term).length)+'</mark>'+t.slice(i+esc(term).length);
+}
+function render(){
+  var term=q.value.trim(), tl=term.toLowerCase(), shown=0;
+  list.innerHTML='';
+  PLACES.forEach(function(p){
+    if(filter!=='all' && p.type!==filter) return;
+    var hay=(p.n+' '+p.name+' '+p.sub+' '+p.venues.map(function(v){return v.join(' ')}).join(' ')).toLowerCase();
+    if(tl && hay.indexOf(tl)<0) return;
+    shown++;
+    var li=document.createElement('li'); li.className='place'+(p.type==='fac'?' fac':''); li.dataset.n=p.n;
+    var body='';
+    if(p.venues.length){
+      body='<p>'+(p.venues.length>1?'Venues in this building, in visiting order:':'Venue in this building:')+'</p><ol class="seq">'+
+        p.venues.map(function(v){return '<li><span class="code">'+hl(v[0],term)+'</span><span class="topic">'+hl(v[1],term)+'</span></li>'}).join('')+'</ol>';
+    }else{
+      body='<p>'+(p.name==='Canteen'?'Refreshments are available here.':'Public washrooms are located here.')+'</p>';
+    }
+    li.innerHTML='<button class="head" type="button" aria-expanded="false"><span class="num">'+p.n+'</span>'+
+      '<span class="ttl"><strong>'+hl(p.name,term)+'</strong><small>'+esc(p.sub)+'</small></span><span class="chev"></span></button>'+
+      '<div class="body">'+body+'</div>';
+    li.querySelector('.head').onclick=function(){ if(selected===p.n) clearSel(); else select(p.n); };
+    list.appendChild(li);
   });
-  empty.style.display=c?'none':'block';
+  empty.style.display=shown?'none':'block';
+  markSel(false);
+}
+q.addEventListener('input',render);
+document.getElementById('chips').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  filter=b.dataset.f;
+  Array.prototype.forEach.call(this.children,function(c){c.setAttribute('aria-pressed',c===b)});
+  render();
 });
 
 /* init */
+render();
 var img=document.getElementById('mapimg');
-function init(){fitView();}
-if(img.complete) init(); else img.onload=init;
-window.addEventListener('resize',function(){var was=selected;fitView();if(was)select(was,false);});
+if(img.complete) fitView(); else img.onload=fitView;
+window.addEventListener('resize',function(){var was=selected;fitView();if(was)select(was);});
 setTimeout(hideHint,6000);
 </script>
 </body>
