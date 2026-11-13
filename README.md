@@ -8,15 +8,14 @@
 
 <br><br>
 
-### 🧫 Interactive Venue Map for the MINDORA Microbiology Exhibition
+### 🧫 Your Interactive Guide to the MINDORA Microbiology Exhibition
 
-[![Live Site](https://img.shields.io/badge/🌐_Live_Demo-mindora.publicvm.com-3db54a?style=for-the-badge)](https://mindora.publicvm.com/)
-![Mobile Friendly](https://img.shields.io/badge/Mobile-Friendly-035b82?style=for-the-badge)
-![No Dependencies](https://img.shields.io/badge/Dependencies-None-1e9077?style=for-the-badge)
-![Vanilla JS](https://img.shields.io/badge/Built_with-HTML_·_CSS_·_JS-262262?style=for-the-badge)
+[![Open the Map](https://img.shields.io/badge/🗺️_Open_the_Venue_Map-mindora.publicvm.com-3db54a?style=for-the-badge)](https://mindora.publicvm.com/)
+![Phone Friendly](https://img.shields.io/badge/📱_Phone-Friendly-035b82?style=for-the-badge)
+![Free](https://img.shields.io/badge/No_App_Needed-1e9077?style=for-the-badge)
 
 <a href="https://mindora.publicvm.com/">
-  <img src="https://readme-typing-svg.demolab.com?font=Segoe+UI&weight=600&size=22&pause=1200&color=035B82&center=true&vCenter=true&width=700&lines=Find+every+lab%2C+lecture+hall+%26+facility;Tap+a+number+on+the+map+to+explore;Search+by+venue+code+or+topic+(e.g.+LH04);Pinch+to+zoom+%C2%B7+Drag+to+move" alt="Animated tagline">
+  <img src="https://readme-typing-svg.demolab.com?font=Segoe+UI&weight=600&size=22&pause=1200&color=035B82&center=true&vCenter=true&width=700&lines=Find+every+lab%2C+lecture+hall+%26+facility;Tap+a+number+on+the+map+to+explore;Search+by+venue+code+or+topic;Plan+your+route+through+9+exhibit+venues" alt="Animated tagline">
 </a>
 
 </div>
@@ -29,137 +28,238 @@
 
 <img src="screenshot.png" alt="MINDORA venue map screenshot" width="95%">
 
-<sub><i>Map on the left · searchable venue list on the right (stacks vertically on phones)</i></sub>
+<sub><i>Campus map with numbered buildings, plus a searchable venue list beside it.</i></sub>
 
 </div>
 
 <img src="divider.svg" width="100%" alt="">
 
-## ✨ Features
+## 📊 The Exhibition at a Glance
 
-| | Feature | What it does |
-|---|---|---|
-| 🗺️ | **Zoomable map** | Pinch, drag, scroll-wheel, double-tap and **+ / − / fit** buttons |
-| 📍 | **Animated pin** | A pulsing indigo ring marks the selected building and the map auto-centres on it |
-| 🔢 | **Tap-to-select** | Tap any numbered circle on the map to open that building's details |
-| 🔎 | **Live search** | Search by venue code (`LH04`), topic (`Astromicrobiology`) or building name, with highlighted matches |
-| 🏷️ | **Filter chips** | Switch between **All**, **Exhibits** and **Facilities** |
-| 🚶 | **Visiting order** | Venues are listed in the order visitors walk through them, with a connected timeline |
-| 📱 | **Mobile first** | Touch gestures, safe-area support, large tap targets, responsive split layout on desktop |
-| ♿ | **Accessible** | ARIA labels, `aria-expanded` states, visible focus rings, reduced-motion support |
-| ⚡ | **Zero dependencies** | One HTML file plus two images, so it works on any static host and loads fast |
+<div align="center">
+
+| 🏛️ **3** | 🔬 **9** | 🧪 **8** | 🍽️ **1** | 🚻 **1** |
+|:-:|:-:|:-:|:-:|:-:|
+| Exhibit buildings | Exhibit venues | Microbiology fields | Canteen | Washroom block |
+
+</div>
+
+Nine venues are spread across three buildings. They cover the main branches of microbiology, from the soil under our feet to life beyond Earth.
 
 <img src="divider.svg" width="100%" alt="">
 
-## 🏛️ Venue Directory
+## 🧭 Plan Your Visit
 
-### 🔬 Exhibits
+The arrows on the map show the suggested walking route. Start at the bottom, follow the main road north, then loop back down past the last building.
 
-| # | Building | Venue | Topic |
-|:-:|----------|:-----:|-------|
-| **01** | LH11 Building | `LH11` | Agriculture & Soil |
-| **02** | Stage I Building | `ZOO Lab` | Microbiology |
-| | | `BOT Lab` | Practical Session |
-| | | `LH04` | Astromicrobiology |
-| | | `LH02` | Industrial Microbiology |
-| | | `LH01` | Environmental & Water |
-| **03** | Building 03 | `LH07` | Medical Microbiology |
-| | | `LH09` | Food Microbiology |
-| | | `LH08` | Bio Tech & Molecular Microbiology |
+```text
+   START                                                         
+     │                                                           
+     ▼                                                           
+  ┌────────┐      ┌──────────────────┐      ┌─────────────┐      
+  │ 01     │ ───▶ │ 02               │ ───▶ │ 03          │      
+  │ LH11   │      │ Stage I Building │      │ Building 03 │      
+  │ 1 venue│      │ 5 venues         │      │ 3 venues    │      
+  └────────┘      └──────────────────┘      └─────────────┘      
+                                                                 
+   ☕ 04 Canteen and 🚻 05 Washrooms are on the west side of the grounds
+```
 
-### 🍽️ Facilities
+| Stop | Building | Venues | Suggested time* |
+|:-:|----------|:-:|:-:|
+| 🟢 **01** | LH11 Building | 1 | 15–20 min |
+| 🟢 **02** | Stage I Building | 5 | 60–75 min |
+| 🟢 **03** | Building 03 | 3 | 40–50 min |
+| ☕ **04** | Canteen | rest stop | as you like |
+| 🚻 **05** | Washrooms | – | – |
 
-| # | Place | Details |
-|:-:|-------|---------|
-| **04** | Canteen | Food & drinks |
-| **05** | Washrooms | Public washrooms |
-
-<sub>📌 Venues inside a building are listed in visiting order.</sub>
+<sub>*A rough guide to help you plan. Take as long as you like at each venue.</sub>
 
 <img src="divider.svg" width="100%" alt="">
 
-## 🎮 How to Use
+## 🔬 Exhibit Venues
+
+### 🌱 01 · LH11 Building
+
+| Venue | Theme |
+|:-:|-------|
+| `LH11` | **Agriculture & Soil Microbiology** |
+
+Explore the tiny organisms that keep soil fertile: nitrogen-fixing bacteria, helpful fungi and the microbes that feed our crops.
+
+---
+
+### 🎓 02 · Stage I Building
+
+Five venues, visited in this order:
+
+| Order | Venue | Theme |
+|:-:|:-:|-------|
+| ➊ | `ZOO Lab` | **Microbiology** |
+| ➋ | `BOT Lab` | **Practical Session** (hands-on) |
+| ➌ | `LH04` | **Astromicrobiology** |
+| ➍ | `LH02` | **Industrial Microbiology** |
+| ➎ | `LH01` | **Environmental & Water Microbiology** |
+
+---
+
+### 🏥 03 · Building 03
+
+Three venues, visited in this order:
+
+| Order | Venue | Theme |
+|:-:|:-:|-------|
+| ➊ | `LH07` | **Medical Microbiology** |
+| ➋ | `LH09` | **Food Microbiology** |
+| ➌ | `LH08` | **Biotechnology & Molecular Microbiology** |
+
+<img src="divider.svg" width="100%" alt="">
+
+## 🔎 Quick Find: Every Venue by Code
+
+| Code | Theme | Building | Map # |
+|:-:|-------|----------|:-:|
+| `BOT Lab` | Practical Session | Stage I Building | 02 |
+| `LH01` | Environmental & Water | Stage I Building | 02 |
+| `LH02` | Industrial Microbiology | Stage I Building | 02 |
+| `LH04` | Astromicrobiology | Stage I Building | 02 |
+| `LH07` | Medical Microbiology | Building 03 | 03 |
+| `LH08` | Biotech & Molecular Microbiology | Building 03 | 03 |
+| `LH09` | Food Microbiology | Building 03 | 03 |
+| `LH11` | Agriculture & Soil | LH11 Building | 01 |
+| `ZOO Lab` | Microbiology | Stage I Building | 02 |
+
+<img src="divider.svg" width="100%" alt="">
+
+## 🧬 What You Will Discover
 
 <table>
 <tr>
-<td align="center" width="25%"><h3>1️⃣</h3><b>Open the map</b><br><sub>Visit the live site on any phone or computer</sub></td>
-<td align="center" width="25%"><h3>2️⃣</h3><b>Tap a number</b><br><sub>Or choose a building from the list</sub></td>
-<td align="center" width="25%"><h3>3️⃣</h3><b>See the details</b><br><sub>Pin pulses on the map; venues appear in order</sub></td>
-<td align="center" width="25%"><h3>4️⃣</h3><b>Search faster</b><br><sub>Type a code like <code>LH08</code> or a topic</sub></td>
+<td width="33%" valign="top">
+
+#### 🌱 Agriculture & Soil
+How microbes build healthy soil, help plants grow and reduce the need for chemical fertilisers.
+
+</td>
+<td width="33%" valign="top">
+
+#### 🚀 Astromicrobiology
+Can life survive in space? See how scientists study microbes in extreme environments and ask whether life exists elsewhere.
+
+</td>
+<td width="33%" valign="top">
+
+#### 🏭 Industrial Microbiology
+Microbes at work: producing medicines, enzymes, biofuels and everyday products at scale.
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+#### 💧 Environmental & Water
+How microbes clean water, break down waste and tell us how healthy an ecosystem is.
+
+</td>
+<td valign="top">
+
+#### 🏥 Medical Microbiology
+The science of infection: bacteria, viruses and fungi, how they cause disease and how we fight back.
+
+</td>
+<td valign="top">
+
+#### 🍞 Food Microbiology
+The good, the bad and the delicious: fermentation, food safety and how microbes shape what we eat.
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+#### 🧪 Biotech & Molecular
+Genes, DNA and modern lab techniques that are changing medicine and research.
+
+</td>
+<td valign="top">
+
+#### 🔬 Microbiology (ZOO Lab)
+A close look at the microscopic world and the organisms that live in it.
+
+</td>
+<td valign="top">
+
+#### 🥼 Practical Session (BOT Lab)
+Get hands-on. Try the techniques yourself and see the science up close.
+
+</td>
 </tr>
 </table>
 
-### Controls
+<img src="divider.svg" width="100%" alt="">
 
-| Action | Touch | Mouse |
-|--------|-------|-------|
-| Pan | Drag with one finger | Click and drag |
-| Zoom | Pinch | Scroll wheel / double-click |
-| Select building | Tap number | Click number |
-| Reset view | `⤢` button | `⤢` button |
-| Clear selection | `×` on the chip | `×` on the chip |
+## 🎯 Pick Your Path
+
+| If you are interested in... | Head to |
+|-----------------------------|---------|
+| 🌾 Farming and the environment | `LH11` → `LH01` |
+| 🚀 Space and extreme life | `LH04` |
+| 💊 Health and disease | `LH07` → `LH08` |
+| 🍽️ Food and nutrition | `LH09` |
+| 🏭 Careers in industry | `LH02` → `LH08` |
+| 🧑‍🔬 Trying experiments yourself | `BOT Lab` |
+| 🔭 The basics of microbiology | `ZOO Lab` |
 
 <img src="divider.svg" width="100%" alt="">
 
-## 📁 Project Structure
+## 📱 Using the Online Map
 
-```text
-mindora/
-├── index.html      # App: layout, styles and script in one file
-├── map.jpg         # Venue map image (3046 × 2199 px)
-├── logo.png        # MINDORA logo and favicon
-├── screenshot.png  # Preview used in this README
-├── banner.svg      # Animated README banner
-├── divider.svg     # Animated README divider
-└── README.md
-```
+Open **https://mindora.publicvm.com/** on your phone and you can:
 
-## 🚀 Run Locally
+- 🔢 **Tap any numbered circle** on the map to see what is inside that building
+- 📍 **Watch the pulsing pin** guide you to the exact spot
+- 🔎 **Search** by venue code such as `LH04`, or by topic such as *medical*
+- 🏷️ **Filter** the list to show only **Exhibits** or **Facilities**
+- 🤏 **Pinch to zoom** and drag to move around the grounds
+- ⤢ **Reset** the view at any time to see the whole map
 
-No build step and no installs.
+## ❓ Visitor FAQ
 
-```bash
-# Option 1: just open the file
-open index.html
+<details>
+<summary><b>Where do I start?</b></summary>
+<br>
+Begin at <b>01 (LH11 Building)</b> and follow the arrows on the map north to Stage I, then on to Building 03.
+</details>
 
-# Option 2: serve it locally
-python3 -m http.server 8080
-# then visit http://localhost:8080
-```
+<details>
+<summary><b>Where can I get food and drink?</b></summary>
+<br>
+The <b>Canteen (04)</b> is on the north-west side of the grounds, a short walk from the Stage I Building.
+</details>
 
-## 🛠️ Customise
+<details>
+<summary><b>Where are the washrooms?</b></summary>
+<br>
+<b>Washrooms (05)</b> are in the middle-west of the grounds, a short walk from LH11.
+</details>
 
-Everything is driven by the `PLACES` array inside `index.html`.
+<details>
+<summary><b>I can't find a venue. What do I do?</b></summary>
+<br>
+Type its code (for example <code>LH09</code>) into the search box. The map will show you which building it is in.
+</details>
 
-```js
-{
-  n: "03",                 // number shown on the map
-  x: 2361, y: 1555,        // pin position in map-image pixels
-  type: "ex",              // "ex" = exhibit, "fac" = facility
-  name: "Building 03",
-  sub: "3 venues",
-  venues: [["LH07", "Medical Microbiology"], ...]   // [code, topic] in visiting order
-}
-```
+<details>
+<summary><b>Is there a hands-on activity?</b></summary>
+<br>
+Yes. The <b>BOT Lab Practical Session</b> in the Stage I Building lets you try things yourself.
+</details>
 
-**Adding a venue:** add a `[code, topic]` pair to the right building's `venues` list.
-**Adding a building:** add a new object to `PLACES` and use the circle's centre pixel for `x` and `y`.
-**Swapping the map:** replace `map.jpg` and update `W` and `H` at the top of the script to the new image size.
-
-## 🎨 Brand Colours
-
-| Colour | Hex | Used for |
-|--------|-----|----------|
-| 🟦 Navy | `#035b82` | Headings, building badges, active filter |
-| 🟩 Green | `#3db54a` | Header accent, timeline |
-| 🟢 Teal | `#1e9077` | Facility badges |
-| 🟪 Indigo | `#262262` | Selected pin and chip |
-
-## 🌍 Deployment
-
-It is a static site, so any host works: **GitHub Pages**, **Netlify**, **Cloudflare Pages**, or a plain web server. Upload `index.html`, `map.jpg` and `logo.png` and you are live.
-
-Current deployment: **https://mindora.publicvm.com/**
+<details>
+<summary><b>Do I need to install anything?</b></summary>
+<br>
+No. The map works in any phone or computer browser.
+</details>
 
 <img src="divider.svg" width="100%" alt="">
 
